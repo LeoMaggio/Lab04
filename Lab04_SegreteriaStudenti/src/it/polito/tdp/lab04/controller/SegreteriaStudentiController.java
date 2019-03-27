@@ -60,14 +60,20 @@ public class SegreteriaStudentiController {
     	try {
 			id = Integer.parseInt(matricola.getText().trim());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	Studente s = this.model.getStudente(id);
-    	cognome.setText(s.getCognome());
-    	cognome.setDisable(true);
-    	nome.setText(s.getNome());
-    	nome.setDisable(true);
+    	try {
+			Studente s = this.model.getStudente(id);
+			cognome.setText(s.getCognome());
+			cognome.setDisable(true);
+			nome.setText(s.getNome());
+			nome.setDisable(true);
+			txtResult.clear();
+		} catch (Exception e) {
+			e.printStackTrace();
+			txtResult.appendText("Inserire una matricola corretta per effettuare il completamento\n");
+			matricola.clear();
+		}
     }
 
     @FXML
