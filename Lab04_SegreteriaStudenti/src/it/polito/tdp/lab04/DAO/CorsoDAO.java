@@ -93,7 +93,7 @@ public class CorsoDAO {
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()) {
-				Studente s  = dao.getStudente(rs.getString("matricola"));
+				Studente s  = dao.getStudente(rs.getInt("matricola"));
 				studenti.add(s);
 				System.out.println(s.getMatricola() + " " + s.getCognome() + " " + s.getNome() + " " + s.getCDS());
 			}

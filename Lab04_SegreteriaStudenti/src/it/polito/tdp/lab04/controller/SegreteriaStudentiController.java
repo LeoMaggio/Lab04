@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.lab04.model.Model;
+import it.polito.tdp.lab04.model.Studente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -55,17 +56,28 @@ public class SegreteriaStudentiController {
 
     @FXML
     void doComplete(ActionEvent event) {
-
+    	int id = 0;
+    	try {
+			id = Integer.parseInt(matricola.getText().trim());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	Studente s = this.model.getStudente(id);
+    	cognome.setText(s.getCognome());
+    	cognome.setDisable(true);
+    	nome.setText(s.getNome());
+    	nome.setDisable(true);
     }
 
     @FXML
     void doIscrivi(ActionEvent event) {
-
+    	
     }
 
     @FXML
     void doReset(ActionEvent event) {
-
+    	txtResult.clear();
     }
 
     @FXML

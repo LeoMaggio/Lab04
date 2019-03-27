@@ -50,13 +50,13 @@ public class StudenteDAO {
 	/*
 	 * Data una matricola, ottengo lo studente
 	 */
-	public Studente getStudente(String id) {
+	public Studente getStudente(int id) {
 		String sql = "SELECT * FROM studente WHERE matricola = ?";
 		Studente s = null;
 		try {
 			Connection conn = ConnectDB.getConnection();
 			PreparedStatement st = conn.prepareStatement(sql);
-			st.setString(1, id);
+			st.setInt(1, id);
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()) {
