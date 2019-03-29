@@ -99,7 +99,7 @@ public class SegreteriaStudentiController {
 		}
     	try {
 			Studente s = this.model.getStudente(id);
-			if(!s.getCognome().equals(this.cognome.getText()) || !s.getNome().equals(this.nome.getText())) {
+			if(!s.getCognome().equals(this.cognome.getText().toUpperCase()) || !s.getNome().equals(this.nome.getText().toUpperCase())) {
 				txtResult.appendText("Dati inseriti in modo errato\n");
 				matricola.clear();
 				cognome.clear();
