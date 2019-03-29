@@ -37,4 +37,8 @@ public class Model {
 	public Studente getStudente(int id) {
 		return sdao.getStudente(id);
 	}
+	
+	public List<Corso> getCorsi(int id) {
+		return sdao.getCorsi(id);
+	}
 }

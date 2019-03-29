@@ -81,13 +81,40 @@ public class SegreteriaStudentiController {
     @FXML
     void doReset(ActionEvent event) {
     	txtResult.clear();
+    	matricola.clear();
+    	cognome.clear();
+    	nome.clear();
     	cognome.setDisable(false);
     	nome.setDisable(false);
     }
 
     @FXML
     void doSearchCorsi(ActionEvent event) {
-
+    	List<Corso> corsi = new LinkedList<Corso>();
+    	int id = 0;
+    	try {
+			id = Integer.parseInt(matricola.getText().trim());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	try {
+			Studente s = this.model.getStudente(id);
+			if(!s.getCognome().equals(this.cognome.getText()) || !s.getNome().equals(this.nome.getText())) {
+				txtResult.appendText("Dati inseriti in modo errato\n");
+				matricola.clear();
+				cognome.clear();
+				nome.clear();
+				return;
+			}
+			corsi = this.model.getCorsi(id);
+			for(Corso c : corsi) {
+				txtResult.appendText(c.toString()+"\n");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			txtResult.appendText("Dati inseriti in modo errato\n");
+			matricola.clear();
+		}
     }
 
     @FXML
