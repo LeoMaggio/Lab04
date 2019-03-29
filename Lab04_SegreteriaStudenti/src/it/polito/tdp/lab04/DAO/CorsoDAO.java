@@ -1,11 +1,7 @@
 package it.polito.tdp.lab04.DAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
 import it.polito.tdp.lab04.model.Corso;
 import it.polito.tdp.lab04.model.Studente;
@@ -43,13 +39,29 @@ public class CorsoDAO {
 				// Aggiungi il nuovo oggetto Corso alla lista corsi
 				corsi.add(c);
 			}
-
+			conn.close();
+			rs.close();
+			
 			return corsi;
 
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			throw new RuntimeException("Errore Db");
 		}
+	}
+	
+	public List<String> getTuttiINomiDeiCorsi() {
+		List<String> nomi = new LinkedList<String>();
+		nomi.add("Tutti");
+		try {
+			List<Corso> corsi = getTuttiICorsi();
+			for(Corso c : corsi) {
+				nomi.add(c.getCodins()+" "+c.getNome());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nomi;
 	}
 
 	/*
@@ -71,7 +83,7 @@ public class CorsoDAO {
 						rs.getInt("pd"));
 				System.out.println(c.getCodins() + " " + c.getCrediti() + " " + c.getNome() + " " + c.getPd());
 			}
-			
+			rs.close();
 			conn.close();
 			
 		} catch (SQLException e) {
@@ -84,7 +96,7 @@ public class CorsoDAO {
 	 * Ottengo tutti gli studenti iscritti al Corso
 	 */
 	public List<Studente> getStudentiIscrittiAlCorso(Corso corso) {
-		String sql = "SELECT * FROM iscrizione WHERE codins = ?";
+		String sql = "SELECT * FROM studente s, iscrizione i, corso c WHERE c.codins = i.codins && i.matricola = s.matricola && c.codins =?";
 		List<Studente> studenti = new LinkedList<Studente>();
 		try {
 			Connection conn = ConnectDB.getConnection();
@@ -93,11 +105,11 @@ public class CorsoDAO {
 			ResultSet rs = st.executeQuery();
 			
 			while(rs.next()) {
-				Studente s  = dao.getStudente(rs.getInt("matricola"));
+				Studente s  = new Studente(rs.getInt("matricola"), rs.getString("cognome"), rs.getString("nome"), rs.getString("CDS"));
 				studenti.add(s);
 				System.out.println(s.getMatricola() + " " + s.getCognome() + " " + s.getNome() + " " + s.getCDS());
 			}
-			
+			rs.close();
 			conn.close();
 			
 		} catch (SQLException e) {

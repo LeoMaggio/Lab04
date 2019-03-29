@@ -13,6 +13,10 @@ public class Model {
 	public List<Corso> getTuttiICorsi() {
 		return cdao.getTuttiICorsi();
 	}
+	
+	public List<String> getTuttiINomiDeiCorsi() {
+		return cdao.getTuttiINomiDeiCorsi();
+	}
 
 	public Corso getCorso(Corso corso) {
 		return cdao.getCorso(corso);
@@ -24,6 +28,10 @@ public class Model {
 	
 	public boolean inscriviStudenteACorso(Studente studente, Corso corso) {
 		return cdao.inscriviStudenteACorso(studente, corso);
+	}
+	
+	public List<Studente> getTuttiGliStudenti() {
+		return sdao.getTuttiGliStudenti();
 	}
 	
 	public Studente getStudente(int id) {

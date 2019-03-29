@@ -7,8 +7,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import it.polito.tdp.lab04.model.Corso;
-import it.polito.tdp.lab04.model.Studente;
+import it.polito.tdp.lab04.model.*;
 
 public class StudenteDAO {
 	
@@ -38,7 +37,9 @@ public class StudenteDAO {
 				// Aggiungi il nuovo oggetto Corso alla lista corsi
 				studenti.add(s);
 			}
-
+			conn.close();
+			rs.close();
+			
 			return studenti;
 
 		} catch (SQLException e) {
@@ -67,6 +68,7 @@ public class StudenteDAO {
 			}
 			
 			conn.close();
+			rs.close();
 			
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

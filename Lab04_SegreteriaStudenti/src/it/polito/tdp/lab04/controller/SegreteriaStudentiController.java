@@ -1,18 +1,15 @@
 package it.polito.tdp.lab04.controller;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
-import it.polito.tdp.lab04.model.Model;
-import it.polito.tdp.lab04.model.Studente;
+import it.polito.tdp.lab04.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 
 public class SegreteriaStudentiController {
 	
@@ -34,7 +31,7 @@ public class SegreteriaStudentiController {
     private ComboBox<String> combo;
 
     @FXML
-    private HBox btnIscritti;
+    private Button btnIscritti;
 
     @FXML
     private TextField matricola;
@@ -84,6 +81,8 @@ public class SegreteriaStudentiController {
     @FXML
     void doReset(ActionEvent event) {
     	txtResult.clear();
+    	cognome.setDisable(false);
+    	nome.setDisable(false);
     }
 
     @FXML
@@ -92,13 +91,28 @@ public class SegreteriaStudentiController {
     }
 
     @FXML
-    void doSearchIscritti(MouseEvent event) {
-
+    void doSearchIscritti(ActionEvent event) {
+    	List<Studente> studenti = new LinkedList<Studente>();
+    	try {
+			StringTokenizer st = new StringTokenizer (this.combo.getValue(), " ");
+			String codins = st.nextToken().trim();
+			if(codins.equals("Tutti"))
+				studenti = this.model.getTuttiGliStudenti();
+			else {
+				Corso corso = new Corso(codins, -1, null, -1);
+				studenti = this.model.getStudentiIscrittiAlCorso(corso);
+			}
+			for(Studente s : studenti) {
+				txtResult.appendText(s.toString()+"\n");
+			}
+		} catch (Exception e) {
+			txtResult.appendText("Selezionare un corso\n");
+		}
     }
 
     @FXML
     void initialize() {
-        assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'SegreteriaStudenti.fxml'.";
+    	assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'SegreteriaStudenti.fxml'.";
         assert btnReset != null : "fx:id=\"btnReset\" was not injected: check your FXML file 'SegreteriaStudenti.fxml'.";
         assert combo != null : "fx:id=\"combo\" was not injected: check your FXML file 'SegreteriaStudenti.fxml'.";
         assert btnIscritti != null : "fx:id=\"btnIscritti\" was not injected: check your FXML file 'SegreteriaStudenti.fxml'.";
@@ -108,10 +122,10 @@ public class SegreteriaStudentiController {
         assert cognome != null : "fx:id=\"cognome\" was not injected: check your FXML file 'SegreteriaStudenti.fxml'.";
         assert btnCorsi != null : "fx:id=\"btnCorsi\" was not injected: check your FXML file 'SegreteriaStudenti.fxml'.";
         assert btnIscrivi != null : "fx:id=\"btnIscrivi\" was not injected: check your FXML file 'SegreteriaStudenti.fxml'.";
-
     }
     
     public void setModel(Model model) {
     	this.model = model;
+    	this.combo.getItems().addAll(model.getTuttiINomiDeiCorsi());
     }
 }
