@@ -96,17 +96,41 @@ public class SegreteriaStudentiController {
 			id = Integer.parseInt(matricola.getText().trim());
 		} catch (Exception e) {
 			e.printStackTrace();
+			txtResult.appendText("Dati inseriti in modo errato\n");
+			matricola.clear();
 		}
     	try {
 			Studente s = this.model.getStudente(id);
+			if(this.cognome.getText().isEmpty() && this.nome.getText().isEmpty()) {
+				cognome.setText(s.getCognome());
+				cognome.setDisable(true);
+				nome.setText(s.getNome());
+				nome.setDisable(true);
+			}
 			if(!s.getCognome().equals(this.cognome.getText().toUpperCase()) || !s.getNome().equals(this.nome.getText().toUpperCase())) {
-				txtResult.appendText("Dati inseriti in modo errato\n");
+				txtResult.appendText("Dati inseriti in modo errato: la persona non corrisponde alla matricola\n");
 				matricola.clear();
 				cognome.clear();
 				nome.clear();
 				return;
 			}
 			corsi = this.model.getCorsi(id);
+			try {
+				StringTokenizer st = new StringTokenizer (this.combo.getValue(), " ");
+				String codins = st.nextToken().trim();
+				if(!codins.equals("Tutti") && !codins.isEmpty()) {
+					Corso corso = new Corso(codins, -1, null, -1);
+					if(corsi.contains(corso)) {
+						txtResult.appendText("Studente già iscritto a questo corso.\n");
+					} else {
+						txtResult.appendText("Lo studente non è iscritto a questo corso.\n");
+					}
+					matricola.clear();
+					cognome.clear();
+					nome.clear();
+					return;
+				}
+			} catch (Exception e) {}
 			for(Corso c : corsi) {
 				txtResult.appendText(c.toString()+"\n");
 			}
@@ -114,6 +138,8 @@ public class SegreteriaStudentiController {
 			e.printStackTrace();
 			txtResult.appendText("Dati inseriti in modo errato\n");
 			matricola.clear();
+			cognome.clear();
+			nome.clear();
 		}
     }
 
